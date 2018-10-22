@@ -2,8 +2,14 @@
     <string name="app_name">BackgroundEditor</string>
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
-    <string name="nav_header_title">Android Studio</string>
-    <string name="nav_header_subtitle">android.studio@android.com</string>
+    <string name="nav_header_title">Background Editor</string>
+    <string name="nav_header_subtitle">A very user friendly background editor</string>
     <string name="nav_header_desc">Navigation header</string>
     <string name="action_settings">Settings</string>
+    <!--Main page-->
+    <string name="main_para_1">Hello there Onii-chan~ This is a background changer app I made just for you &lt;3 \n
+        Please enjoy -3-</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>
