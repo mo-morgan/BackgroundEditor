@@ -1,4 +1,4 @@
-package com.example.morgan.backgroundeditor;
+package fragment;
 
 
 import android.os.Bundle;
@@ -7,14 +7,16 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.example.morgan.backgroundeditor.R;
+
 
 /**
  * A simple {@link Fragment} subclass.
  */
-public class Gallery extends Fragment {
+public class GalleryFragment extends Fragment {
 
 
-    public Gallery() {
+    public GalleryFragment() {
         // Required empty public constructor
     }
 

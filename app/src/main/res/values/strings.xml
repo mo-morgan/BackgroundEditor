@@ -11,5 +11,11 @@
         Please enjoy -3-</string>
 
     <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="Select">Test</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="Home_placeholder">Hello blank fragment</string>
+
+    <string name="Settings_placeholder">Hello blank fragment</string>
+
 </resources>
