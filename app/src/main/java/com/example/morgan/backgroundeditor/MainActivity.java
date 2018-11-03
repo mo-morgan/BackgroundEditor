@@ -1,10 +1,13 @@
 package com.example.morgan.backgroundeditor;
 
+import android.Manifest;
+import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
 import android.support.design.widget.Snackbar;
+import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.GravityCompat;
@@ -15,15 +18,21 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.Toast;
 
+import fragment.ChangeFragment;
+import fragment.EditedFragment;
 import fragment.GalleryFragment;
 import fragment.HomeFragment;
+import fragment.SettingsFragment;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
     private static final String TAG_HOME = "home";
     private static final String TAG_GALLERY = "gallery";
     private static final String TAG_SETTINGS = "settings";
+    private static final String TAG_EDITED = "edited";
+    private static final String TAG_CHANGE = "change";
 
     private static String CURRENT_TAG = TAG_HOME;
 
@@ -65,16 +74,78 @@ public class MainActivity extends AppCompatActivity
             CURRENT_TAG = TAG_HOME;
             loadHomeFragment();
         }
+
+        requestPermissions();
+    }
+
+    private void requestPermissions() {
+        ActivityCompat.requestPermissions(MainActivity.this,
+                new String[]{Manifest.permission.READ_EXTERNAL_STORAGE},
+                1);
+
+        ActivityCompat.requestPermissions(MainActivity.this,
+                new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE},
+                2);
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode,
+                                           String permissions[], int[] grantResults) {
+        switch (requestCode) {
+            case 1: {
+                // If request is cancelled, the result arrays are empty.
+                if (grantResults.length > 0
+                        && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+
+                    // permission was granted, yay! Do the
+                    // contacts-related task you need to do.
+                } else {
+
+                    // permission denied, boo! Disable the
+                    // functionality that depends on this permission.
+                    Toast.makeText(MainActivity.this, "Permission denied to read your External storage", Toast.LENGTH_SHORT).show();
+                }
+                return;
+            }
+
+            case 2: {
+                // If request is cancelled, the result arrays are empty.
+                if (grantResults.length > 0
+                        && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+
+                    // permission was granted, yay! Do the
+                    // contacts-related task you need to do.
+                } else {
+
+                    // permission denied, boo! Disable the
+                    // functionality that depends on this permission.
+                    Toast.makeText(MainActivity.this, "Permission denied to write your External storage", Toast.LENGTH_SHORT).show();
+                }
+                return;
+            }
+        }
     }
 
     @Override
     public void onBackPressed() {
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+
         if (drawer.isDrawerOpen(GravityCompat.START)) {
             drawer.closeDrawer(GravityCompat.START);
-        } else {
-            super.onBackPressed();
+            return;
         }
+
+        // Loads home fragment when back key is pressed when user is in other fragment than home
+        if (shouldLoadHomeFragOnBackPress) {
+            if (NAV_ITEM_INDEX != 0) {
+                NAV_ITEM_INDEX = 0;
+                CURRENT_TAG = TAG_HOME;
+                loadHomeFragment();
+                return;
+            }
+        }
+
+        super.onBackPressed();
     }
 
     @Override
@@ -93,7 +164,9 @@ public class MainActivity extends AppCompatActivity
 
         //noinspection SimplifiableIfStatement
         if (id == R.id.action_settings) {
-            return true;
+            NAV_ITEM_INDEX = 100;
+            CURRENT_TAG = TAG_SETTINGS;
+            loadHomeFragment();
         }
 
         return super.onOptionsItemSelected(item);
@@ -113,9 +186,11 @@ public class MainActivity extends AppCompatActivity
             NAV_ITEM_INDEX = 1;
             CURRENT_TAG = TAG_GALLERY;
         } else if (id == R.id.nav_slideshow) {
-
+            NAV_ITEM_INDEX = 2;
+            CURRENT_TAG = TAG_EDITED;
         } else if (id == R.id.nav_manage) {
-
+            NAV_ITEM_INDEX = 3;
+            CURRENT_TAG = TAG_CHANGE;
         } else if (id == R.id.nav_share) {
 
         } else if (id == R.id.nav_send) {
@@ -158,6 +233,15 @@ public class MainActivity extends AppCompatActivity
             case 1:
                 GalleryFragment galleryFragment = new GalleryFragment();
                 return galleryFragment;
+            case 2:
+                EditedFragment editedFragment = new EditedFragment();
+                return editedFragment;
+            case 3:
+                ChangeFragment changeFragment = new ChangeFragment();
+                return changeFragment;
+            case 100:
+                SettingsFragment settingsFragment = new SettingsFragment();
+                return settingsFragment;
             default:
                 return new HomeFragment();
         }
