@@ -25,11 +25,11 @@ public class PNG {
         return height;
     }
 
-    public List<Pixel> getImagePixel() {
+    public List<Pixel> getImage() {
         return imagePixel;
     }
 
-    public void setImagePixel(List<Pixel> imagePixel) {
+    public void setImage(List<Pixel> imagePixel) {
         this.imagePixel = imagePixel;
     }
 
