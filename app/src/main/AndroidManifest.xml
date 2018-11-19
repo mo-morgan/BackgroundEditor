@@ -24,9 +24,6 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity
-            android:name=".GalleryActivity"
-            android:label="@string/app_name" />
         <activity android:name=".FullScreenViewActivity" />
         <activity android:name=".GalleryRecyclerViewActivity"></activity>
     </application>

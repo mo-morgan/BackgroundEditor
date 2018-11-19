@@ -9,7 +9,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
 
-import com.example.morgan.backgroundeditor.GalleryActivity;
+import com.example.morgan.backgroundeditor.GalleryRecyclerViewActivity;
 import com.example.morgan.backgroundeditor.R;
 
 
@@ -39,7 +39,7 @@ public class GalleryFragment extends Fragment implements View.OnClickListener {
 
     @Override
     public void onClick(View v) {
-        Intent intent = new Intent(getActivity(), GalleryActivity.class);
+        Intent intent = new Intent(getActivity(), GalleryRecyclerViewActivity.class);
         startActivity(intent);
     }
 }
