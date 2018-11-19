@@ -6,12 +6,14 @@ import android.database.Cursor;
 import android.net.Uri;
 import android.provider.MediaStore;
 import android.support.annotation.NonNull;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.RelativeLayout;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
@@ -26,8 +28,12 @@ import java.util.List;
 /**
  * Custom ImageAdapter Class for RecyclerView gallery
  */
+
 public class ImageAdapter extends RecyclerView.Adapter<ImageAdapter.ViewHolder> {
     private Activity context;
+
+    private RelativeLayout relativeLayout;
+    private FloatingActionButton fab;
 
     private List<ImageModel> images = new ArrayList<>();
     private List<ImageModel> selectedImages = new ArrayList<>();
@@ -38,6 +44,12 @@ public class ImageAdapter extends RecyclerView.Adapter<ImageAdapter.ViewHolder> 
         for (String s : getAllShownImagesPath(context)) {
             images.add(new ImageModel(s));
         }
+        relativeLayout = context.findViewById(R.id.galleryMain);
+    }
+
+    //TODO: Setup Floating action button on top of recycler view
+    private void setupSelectButton() {
+
     }
 
     public Object getItem(int position) {
