@@ -6,6 +6,7 @@ import android.database.Cursor;
 import android.net.Uri;
 import android.provider.MediaStore;
 import android.support.annotation.NonNull;
+import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.RecyclerView;
@@ -13,7 +14,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
-import android.widget.RelativeLayout;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
@@ -33,7 +33,7 @@ import java.util.List;
 public class ImageAdapter extends RecyclerView.Adapter<ImageAdapter.ViewHolder> {
     private Activity context;
 
-    private RelativeLayout relativeLayout;
+    private CoordinatorLayout coordinatorLayout;
     private FloatingActionButton cancel;
     private FloatingActionButton submit;
 
@@ -46,25 +46,46 @@ public class ImageAdapter extends RecyclerView.Adapter<ImageAdapter.ViewHolder> 
         for (String s : getAllShownImagesPath(context)) {
             images.add(new ImageModel(s));
         }
-        relativeLayout = context.findViewById(R.id.galleryMain);
+        coordinatorLayout = context.findViewById(R.id.galleryMain);
 
         cancel = (FloatingActionButton) context.findViewById(R.id.cancel);
+        submit = (FloatingActionButton) context.findViewById(R.id.submit);
+        if (selectedImages.size() == 0) {
+            cancel.hide();
+            submit.hide();
+        }
+
         cancel.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                List<ImageModel> k = new ArrayList<>();
                 for (ImageModel i : selectedImages) {
                     i.getImage().setColorFilter(null);
-                    selectedImages.remove(i);
+                    k.add(i);
                 }
+                selectedImages.removeAll(k);
+                cancel.hide();
+                submit.hide();
             }
         });
-//        setupCancelButton();
-//        setupSubmitButton();
+
+        submit.setOnClickListener(new View.OnClickListener() {
+
+            @Override
+            public void onClick(View v) {
+                // should send a form to making a new folder name
+            }
+        });
     }
 
     //TODO: Setup Floating action button on top of recycler view
     private void setupSubmitButton() {
+        if (selectedImages.size() == 0) {
+            submit.hide();
+            return;
+        }
 
+        submit.show();
     }
 
     /**
@@ -74,10 +95,11 @@ public class ImageAdapter extends RecyclerView.Adapter<ImageAdapter.ViewHolder> 
     private void setupCancelButton() {
         if (selectedImages.size() == 0) {
             // always set to invisible
+            cancel.hide();
             return;
         }
-
         // set button to be visible
+        cancel.show();
     }
 
     public Object getItem(int position) {
@@ -156,6 +178,8 @@ public class ImageAdapter extends RecyclerView.Adapter<ImageAdapter.ViewHolder> 
      * Overriden OnClickListener
      *  - adds/removes image to/from selected images if at least 1 item is selected
      *  - otherwise, goes to fullscreen activity
+     *  - update submit/cancel buttons
+     *  - change toolbar selected item count
      */
     public class OnImageClickListener implements View.OnClickListener {
         public int position;
@@ -174,14 +198,13 @@ public class ImageAdapter extends RecyclerView.Adapter<ImageAdapter.ViewHolder> 
                 if (selectedImages.contains(model)) {
                     selectedImages.remove(model);
                     holder.imageView.setColorFilter(null);
-                    setupCancelButton();
-                    setupSubmitButton();
                 } else {
                     selectedImages.add(model);
                     holder.imageView.setColorFilter(ContextCompat.getColor(context, R.color.cyan), android.graphics.PorterDuff.Mode.MULTIPLY);
                 }
                 model.setSelected(!model.isSelected());
-
+                setupCancelButton();
+                setupSubmitButton();
             } else {
                 Intent i = new Intent(context, FullScreenViewActivity.class);
                 i.putExtra("position", position);
@@ -193,6 +216,8 @@ public class ImageAdapter extends RecyclerView.Adapter<ImageAdapter.ViewHolder> 
     /**
      * Overriden OnLongClickListener
      * - adds/removes image to/from selected images
+     * - updates submit/cancel buttons
+     * - change toolbar's selected item count
      */
     public class OnImageLongClickListener implements View.OnLongClickListener {
         public ImageModel model;
@@ -214,6 +239,8 @@ public class ImageAdapter extends RecyclerView.Adapter<ImageAdapter.ViewHolder> 
                 holder.imageView.setColorFilter(ContextCompat.getColor(context, R.color.cyan), android.graphics.PorterDuff.Mode.MULTIPLY);
             }
             model.setSelected(!model.isSelected());
+            setupCancelButton();
+            setupSubmitButton();
             return true;
         }
     }
