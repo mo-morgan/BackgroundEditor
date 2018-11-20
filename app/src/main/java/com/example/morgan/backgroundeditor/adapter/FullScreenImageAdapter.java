@@ -11,10 +11,10 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.ImageView;
 import android.widget.RelativeLayout;
 
 import com.example.morgan.backgroundeditor.R;
+import com.example.morgan.backgroundeditor.Utils.TouchImageView;
 
 import java.util.ArrayList;
 
@@ -41,13 +41,13 @@ public class FullScreenImageAdapter extends PagerAdapter {
     @NonNull
     @Override
     public Object instantiateItem(@NonNull final ViewGroup container, int position) {
-        ImageView imgDisplay;
+        TouchImageView imgDisplay;
         Button btnClose;
 
         inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         View viewLayout = inflater.inflate(R.layout.layout_fullscreen_image, container, false);
 
-        imgDisplay = (ImageView) viewLayout.findViewById(R.id.imgDisplay);
+        imgDisplay = (TouchImageView) viewLayout.findViewById(R.id.imgDisplay);
         btnClose = (Button) viewLayout.findViewById(R.id.btnClose);
 
         BitmapFactory.Options options = new BitmapFactory.Options();

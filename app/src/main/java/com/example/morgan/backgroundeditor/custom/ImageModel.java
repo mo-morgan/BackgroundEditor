@@ -1,7 +1,10 @@
 package com.example.morgan.backgroundeditor.custom;
 
+import android.widget.ImageView;
+
 public class ImageModel {
     private String imageLocation;
+    private ImageView imageview;
     private boolean isSelected = false;
 
     public ImageModel(String imageLocation) {
@@ -12,6 +15,8 @@ public class ImageModel {
         return imageLocation;
     }
 
+    public ImageView getImage() { return imageview;}
+
     public boolean isSelected() {
         return isSelected;
     }
@@ -19,4 +24,6 @@ public class ImageModel {
     public void setSelected(boolean selected) {
         isSelected = selected;
     }
+
+    public void setImageView(ImageView imageview) { this.imageview = imageview; }
 }

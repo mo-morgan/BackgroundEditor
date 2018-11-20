@@ -29,11 +29,13 @@ import java.util.List;
  * Custom ImageAdapter Class for RecyclerView gallery
  */
 
+// TODO: neeed to refactor class such that ImageModel stores ImageView, Location, and whether it is selected
 public class ImageAdapter extends RecyclerView.Adapter<ImageAdapter.ViewHolder> {
     private Activity context;
 
     private RelativeLayout relativeLayout;
-    private FloatingActionButton fab;
+    private FloatingActionButton cancel;
+    private FloatingActionButton submit;
 
     private List<ImageModel> images = new ArrayList<>();
     private List<ImageModel> selectedImages = new ArrayList<>();
@@ -45,11 +47,37 @@ public class ImageAdapter extends RecyclerView.Adapter<ImageAdapter.ViewHolder> 
             images.add(new ImageModel(s));
         }
         relativeLayout = context.findViewById(R.id.galleryMain);
+
+        cancel = (FloatingActionButton) context.findViewById(R.id.cancel);
+        cancel.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                for (ImageModel i : selectedImages) {
+                    i.getImage().setColorFilter(null);
+                    selectedImages.remove(i);
+                }
+            }
+        });
+//        setupCancelButton();
+//        setupSubmitButton();
     }
 
     //TODO: Setup Floating action button on top of recycler view
-    private void setupSelectButton() {
+    private void setupSubmitButton() {
 
+    }
+
+    /**
+     * Setup cancel button: on click should remove all highlights
+     * from selected images as well as removing them from list
+     */
+    private void setupCancelButton() {
+        if (selectedImages.size() == 0) {
+            // always set to invisible
+            return;
+        }
+
+        // set button to be visible
     }
 
     public Object getItem(int position) {
@@ -71,6 +99,8 @@ public class ImageAdapter extends RecyclerView.Adapter<ImageAdapter.ViewHolder> 
         } else {
             viewHolder.imageView.setColorFilter(null);
         }
+        model.setImageView(viewHolder.imageView);
+
         Glide.with(context)
                 .load(model.getImageView())
                 .apply(new RequestOptions()
@@ -124,7 +154,7 @@ public class ImageAdapter extends RecyclerView.Adapter<ImageAdapter.ViewHolder> 
 
     /**
      * Overriden OnClickListener
-     *  - adds/revmoves image to/from selected images if at least 1 item is selected
+     *  - adds/removes image to/from selected images if at least 1 item is selected
      *  - otherwise, goes to fullscreen activity
      */
     public class OnImageClickListener implements View.OnClickListener {
@@ -144,6 +174,8 @@ public class ImageAdapter extends RecyclerView.Adapter<ImageAdapter.ViewHolder> 
                 if (selectedImages.contains(model)) {
                     selectedImages.remove(model);
                     holder.imageView.setColorFilter(null);
+                    setupCancelButton();
+                    setupSubmitButton();
                 } else {
                     selectedImages.add(model);
                     holder.imageView.setColorFilter(ContextCompat.getColor(context, R.color.cyan), android.graphics.PorterDuff.Mode.MULTIPLY);
