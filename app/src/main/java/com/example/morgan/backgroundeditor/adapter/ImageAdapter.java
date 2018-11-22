@@ -7,7 +7,6 @@ import android.net.Uri;
 import android.provider.MediaStore;
 import android.support.annotation.NonNull;
 import android.support.design.widget.CoordinatorLayout;
-import android.support.design.widget.FloatingActionButton;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -25,17 +24,17 @@ import com.example.morgan.backgroundeditor.custom.ImageModel;
 import java.util.ArrayList;
 import java.util.List;
 
+import static com.example.morgan.backgroundeditor.GalleryRecyclerViewActivity.setupCancelButton;
+import static com.example.morgan.backgroundeditor.GalleryRecyclerViewActivity.setupSubmitButton;
+
 /**
  * Custom ImageAdapter Class for RecyclerView gallery
  */
 
-// TODO: neeed to refactor class such that ImageModel stores ImageView, Location, and whether it is selected
 public class ImageAdapter extends RecyclerView.Adapter<ImageAdapter.ViewHolder> {
     private Activity context;
 
     private CoordinatorLayout coordinatorLayout;
-    private FloatingActionButton cancel;
-    private FloatingActionButton submit;
 
     private List<ImageModel> images = new ArrayList<>();
     private List<ImageModel> selectedImages = new ArrayList<>();
@@ -47,59 +46,6 @@ public class ImageAdapter extends RecyclerView.Adapter<ImageAdapter.ViewHolder> 
             images.add(new ImageModel(s));
         }
         coordinatorLayout = context.findViewById(R.id.galleryMain);
-
-        cancel = (FloatingActionButton) context.findViewById(R.id.cancel);
-        submit = (FloatingActionButton) context.findViewById(R.id.submit);
-        if (selectedImages.size() == 0) {
-            cancel.hide();
-            submit.hide();
-        }
-
-        cancel.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                List<ImageModel> k = new ArrayList<>();
-                for (ImageModel i : selectedImages) {
-                    i.getImage().setColorFilter(null);
-                    k.add(i);
-                }
-                selectedImages.removeAll(k);
-                cancel.hide();
-                submit.hide();
-            }
-        });
-
-        submit.setOnClickListener(new View.OnClickListener() {
-
-            @Override
-            public void onClick(View v) {
-                // should send a form to making a new folder name
-            }
-        });
-    }
-
-    //TODO: Setup Floating action button on top of recycler view
-    private void setupSubmitButton() {
-        if (selectedImages.size() == 0) {
-            submit.hide();
-            return;
-        }
-
-        submit.show();
-    }
-
-    /**
-     * Setup cancel button: on click should remove all highlights
-     * from selected images as well as removing them from list
-     */
-    private void setupCancelButton() {
-        if (selectedImages.size() == 0) {
-            // always set to invisible
-            cancel.hide();
-            return;
-        }
-        // set button to be visible
-        cancel.show();
     }
 
     public Object getItem(int position) {
@@ -145,7 +91,13 @@ public class ImageAdapter extends RecyclerView.Adapter<ImageAdapter.ViewHolder> 
         return images.size();
     }
 
+    public int getSelectedSize() {
+        return selectedImages.size();
+    }
 
+    public List<ImageModel> getSelectedImages() {
+        return selectedImages;
+    }
 
     /**
      * @param activity

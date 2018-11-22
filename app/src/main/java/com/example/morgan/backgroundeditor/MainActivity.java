@@ -86,6 +86,10 @@ public class MainActivity extends AppCompatActivity
         ActivityCompat.requestPermissions(MainActivity.this,
                 new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE},
                 2);
+
+        ActivityCompat.requestPermissions(MainActivity.this,
+                new String[]{Manifest.permission.SET_WALLPAPER},
+                3);
     }
 
     @Override
@@ -123,6 +127,23 @@ public class MainActivity extends AppCompatActivity
                 }
                 return;
             }
+
+            case 3: {
+                // If request is cancelled, the result arrays are empty.
+                if (grantResults.length > 0
+                        && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+
+                    // permission was granted, yay! Do the
+                    // contacts-related task you need to do.
+                } else {
+
+                    // permission denied, boo! Disable the
+                    // functionality that depends on this permission.
+                    Toast.makeText(MainActivity.this, "Permission denied to set wallpaper", Toast.LENGTH_SHORT).show();
+                }
+                return;
+            }
+
         }
     }
 
